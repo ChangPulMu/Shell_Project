@@ -1,0 +1,129 @@
+	
+	mov ax, 0x2401
+	int 0x15
+	
+	jc .A20GATEERROR
+	jmp .A20GATESUCCESS
+
+.A20GATEERROR:
+	in al, 0x92
+	or al, 0x02
+	and al, 0xFE
+	out 0x92, al
+
+
+
+.A20GATESUCCESS:    	
+
+
+
+
+
+kPrintString( 0, 6, "Check memory size....." );	
+	if(kIsMemoryEnough() == FALSE){
+
+		kPrintString( 20, 6, "fail!!" );	
+		kPrintString( 0, 7, "not enough memory 64MB" );	
+		while(1);
+	}
+	else{
+		kPrintString( 20, 6, "Pass!!" );	
+	}
+
+
+
+
+FAILCHECK:
+	mov word [CHECKHASH], cx
+	xor cx, cx
+
+	mov cl, 4	
+	
+	shr ah, cl
+	and al, 0x0F
+		
+	or ax, 0x3030	
+
+	mov word [CHECKHASH+2], ax
+	
+	mov ax, word [CHECKHASH]
+	
+	shr ah, cl
+	and al, 0x0F
+		
+	or ax, 0x3030	
+	
+	mov word [CHECKHASH], ax
+	
+	mov ax, word [HASH1]
+
+	shr ah, cl
+	and al, 0x0F
+		
+	or ax, 0x3030	
+	
+	mov word [REALHASH], ax
+	
+	mov ax, word [HASH2]
+
+	shr ah, cl
+	and al, 0x0F
+		
+	or ax, 0x3030	
+	
+	mov word [REALHASH+2], ax
+	
+	push CHECKHASH
+	push 4
+	push 0
+	call REALPRINTMESSAGE
+	add sp, 6
+	
+	push REALHASH
+	push 4
+	push 9
+	call REALPRINTMESSAGE
+	add sp, 6
+
+
+
+
+
+FAILCHECK:
+	mov word [CHECKHASH], cx
+	
+	mov word [CHECKHASH+2], ax
+	
+	mov ax, word [HASH1]
+	
+	mov word [REALHASH], ax
+	
+	mov ax, word [HASH2]
+
+	mov word [REALHASH+2], ax
+	
+	push CHECKHASH
+	push 4
+	push 0
+	call REALPRINTMESSAGE
+	add sp, 6
+	
+	push REALHASH
+	push 4
+	push 9
+	call REALPRINTMESSAGE
+	add sp, 6
+
+
+if(i == 6){
+			kSetPageEntryData(&(pstPDE[i]), (1 * (PAGE_DEFAULTSIZE >> 20)) >> 12, 0, PAGE_FLAGS_DEFAULT | PAGE_FLAGS_PS, 0);
+
+		}
+		else{
+			kSetPageEntryData(&(pstPDE[i]), (i * (PAGE_DEFAULTSIZE >> 20)) >> 12, dwMappingAdress, PAGE_FLAGS_DEFAULT | PAGE_FLAGS_PS, 0);
+
+		}
+	dwMappingAdress += PAGE_DEFAULTSIZE;
+
+
+
